@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egeroo.composer.media.MediaMapper">
+	<resultMap type="com.egeroo.composer.media.Media" id="mediaMap">
+		<result column="id" property="id"/>
+		<result column="type" property="type"/>
+		<result column="file_name" property="fileName"/>
+		<result column="file_source" property="fileSource"/>
+		<result column="duration" property="duration"/>
+	</resultMap>
+	
+	<select id="getAllMedias" resultMap="mediaMap">
+		select id, type, file_name, concat(#{url}, file_name) as file_source, duration
+		from tr_composer_media order by id;
+	</select>
+	
+	<select id="getNextId" resultType="int" parameterType="int">
+		select max(id) + 1 from tr_composer_media;
+	</select>
+	
+	<select id="getMedia" resultMap="mediaMap">
+		select id, type, file_name, concat(#{url}, file_name) as file_source, duration
+		from tr_composer_media
+		where id = #{id};
+	</select>
+	
+	<insert id="insertMedia">
+		insert into tr_composer_media (id, type, file_name, duration, created_by, updated_by, created_time, updated_time)
+		values(#{media.id}, #{media.type}, #{media.fileName}, #{media.duration}, #{userId}, #{userId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+	</insert>
+	
+	<delete id="deleteMedia">
+		delete from tr_composer_media where id = #{id};
+	</delete>
+</mapper>

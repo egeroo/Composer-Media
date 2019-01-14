@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egeroo.composer.core.tenant.TenantMapper">
+
+<resultMap type="com.egeroo.composer.core.tenant.TenantConnection" id="tenantConnectionMap">
+	<result column="identifier" property="identifier"/>  
+	<result column="schema_server" property="schema_server"/>  
+	<result column="schema_name" property="schema_name"/>  
+ 	<result column="schema_server_port" property="schema_server_port"/>  
+ 	<result column="schema_username" property="schema_username"/>  
+ 	<result column="schema_password" property="schema_password"/>  
+</resultMap>  
+
+<resultMap type="com.egeroo.composer.core.tenant.Tenant" id="tenantMap">
+	<result column="id" property="id"/>  
+	<result column="identifier" property="identifier"/>  
+	<result column="name" property="name"/>  
+ 	<result column="timezone_id" property="timezoneId"/>  
+ 	<result column="created_date" property="createdDate"/>  
+</resultMap>  
+
+    <select id="getTenant" resultMap="tenantMap">
+		select * from tenants where identifier = #{identifier}
+    </select>
+    
+    <select id="getTenantList" resultMap="tenantConnectionMap">
+		select t2.identifier,schema_server,schema_name,schema_server_port,schema_username,schema_password from tenant_server_connections t1
+		inner join tenants t2 on t1.id=t2.oltp_id
+		
+    </select>
+</mapper>
